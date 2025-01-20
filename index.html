@@ -2,31 +2,27 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Invitación Cumpleaños Matias Erazo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego del Calamar</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="contenedor-principal">
         <div id="contenedor-juego">
             <canvas id="panal"></canvas>
-            <span id="temporizador">00:20</span>
-        </div>
-        <div id="contenedor-mensajes">
+            <div id="temporizador">00:20</div>
             <div id="mensaje-inicio" class="mensaje"></div>
             <div id="mensaje-juego" class="mensaje"></div>
             <div id="mensaje-feedback" class="mensaje"></div>
-        </div>
-        <div id="contenedor-controles">
-            <div id="contenedor-barra-progreso"><div id="barra-progreso">0%</div></div>
-            <button id="siguiente-reto">Click aqui para el siguiente reto</button>
+            <button id="siguiente-reto">Click aquí para el siguiente reto</button>
             <button id="boton-reiniciar">Reiniciar Juego</button>
+            <div id="contenedor-barra-progreso">
+                <div id="barra-progreso">0%</div>
+            </div>
+            <div id="contenedor-invitacion" style="display: none; position: relative; max-width: 90%; margin: 20px auto;"> <img id="invitacion-imagen" src="img/invitacion_fiesta.jpg" alt="Invitación a la fiesta" style="max-width: 100%; height: auto; border-radius: 10px; border: 2px solid black; display: block;"> <button id="cerrar-invitacion" style="position: absolute; top: 10px; right: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">X</button> </div>
         </div>
     </div>
-
-   
-
     <script src="script.js"></script>
 </body>
 </html>

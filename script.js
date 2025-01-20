@@ -207,8 +207,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         canvas.addEventListener('touchend', endDrawing);
         canvas.addEventListener('mouseout', endDrawing);
 
+        const invitacionImagen = document.getElementById('invitacion-imagen');
+        const cerrarInvitacion = document.getElementById('cerrar-invitacion');
+        const contenedorInvitacion = document.getElementById('contenedor-invitacion');
+        
         siguienteReto.addEventListener("click", () => {
-            mostrarMensaje("Tu fecha de cumpleaños se acerca, descarga tu tarjeta.", "success");
+            contenedorInvitacion.style.display = 'block';
+            canvas.style.display = 'none';
+            siguienteReto.style.display = 'none';
+            botonReiniciar.style.display = "none";
+            temporizadorDisplay.style.display = 'none'; // Oculta el temporizador
+            barraProgreso.style.display = 'none'; // Oculta la barra de progreso
+        });
+
+        cerrarInvitacion.addEventListener("click", () => {
+            contenedorInvitacion.style.display = 'none';
+            canvas.style.display = 'block';
+            siguienteReto.style.display = "block";
+            botonReiniciar.style.display = "block";
+            temporizadorDisplay.style.display = 'block';
+            barraProgreso.style.display = 'block';
         });
 
         botonReiniciar.addEventListener("click", () => {
