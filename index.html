@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación Cumpleaños Matias Erazo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="contenedor-principal">
+        <div id="contenedor-juego">
+            <canvas id="panal"></canvas>
+            <span id="temporizador">00:20</span>
+        </div>
+        <div id="contenedor-mensajes">
+            <div id="mensaje-inicio" class="mensaje"></div>
+            <div id="mensaje-juego" class="mensaje"></div>
+            <div id="mensaje-feedback" class="mensaje"></div>
+        </div>
+        <div id="contenedor-controles">
+            <div id="contenedor-barra-progreso"><div id="barra-progreso">0%</div></div>
+            <button id="siguiente-reto">Click aqui para el siguiente reto</button>
+            <button id="boton-reiniciar">Reiniciar Juego</button>
+        </div>
+    </div>
+
+    <div id="modal-fiesta" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar-modal">&times;</span>
+            <video id="video-invitacion" controls>
+                <source src="video/invitacion.mp4" type="video/mp4">
+                Tu navegador no soporta videos HTML5.
+            </video>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
