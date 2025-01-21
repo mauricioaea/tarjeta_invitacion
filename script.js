@@ -113,8 +113,9 @@ function draw(e) {
     } else {
         ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
     }
-
-    ctx.lineWidth = 40;
+    let lineWidth = canvas.width * 0.03;
+    lineWidth = Math.max(lineWidth, 10);
+    ctx.lineWidth = lineWidth;
     ctx.lineCap = 'round';
     ctx.globalCompositeOperation = 'destination-out';
     ctx.stroke();
@@ -153,7 +154,7 @@ function calcularProgreso() {
     barraProgreso.textContent = Math.round(progresoRecorte) + '%';
     console.log("Progreso de recorte:", progresoRecorte);
 
-    if (progresoRecorte >= 13 && juegoEnCurso) {
+    if (progresoRecorte >= 6 && juegoEnCurso) {
         finalizarJuego(`Jugador número ${numeroJugador} Felicitaciones, ha sido invitado al Cumpleaños # 8 de MATIAS ERAZO`, "success");
     }
 }
