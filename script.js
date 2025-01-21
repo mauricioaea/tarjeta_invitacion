@@ -19,6 +19,11 @@ let temporizadorInterval;
 let juegoEnCurso = false;
 let progresoRecorte = 0;
 
+// *** INICIO: Código para el audio ***
+let audio = new Audio('audio/carrusel.mp3');
+let audioReproduciendose = false;
+// *** FIN: Código para el audio ***
+
 function iniciarJuego() {
     juegoEnCurso = true;
     tiempoRestante = 20;
@@ -160,7 +165,7 @@ function calcularProgreso() {
 }
 
 function ajustarCanvas() {
-    if (!img.complete) {
+    if (!window.img.complete) { // Usa window.img
         console.error("La imagen aún no se ha cargado. No se puede dibujar en el canvas.");
         return;
     }
@@ -172,34 +177,42 @@ function ajustarCanvas() {
 
     let anchoMaximo = window.innerWidth * 0.9;
     let altoMaximo = window.innerHeight * 0.7;
-    let anchoCalculado = Math.min(img.width, anchoMaximo);
-    let altoCalculado = anchoCalculado * (img.height / img.width);
+    let anchoCalculado = Math.min(window.img.width, anchoMaximo); // Usa window.img
+    let altoCalculado = anchoCalculado * (window.img.height / window.img.width); // Usa window.img
 
     if (altoCalculado > altoMaximo) {
         altoCalculado = altoMaximo;
-        anchoCalculado = altoCalculado * (img.width / img.height);
+        anchoCalculado = altoCalculado * (window.img.width / window.img.height); // Usa window.img
     }
 
     canvas.width = anchoCalculado;
     canvas.height = altoCalculado;
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(window.img, 0, 0, canvas.width, canvas.height); // Usa window.img
 }
 
 function loadImage(src) {
     return new Promise((resolve, reject) => {
         const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = reject;
+        img.onload = () => {
+            console.log("Imagen cargada correctamente:", src);
+            resolve(img);
+        };
+        img.onerror = (error) => {
+            console.error("Error al cargar la imagen:", src, error);
+            reject(error);
+        };
         img.src = src;
     });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const img = await loadImage('img/panal.png'); // Esperamos a que la imagen se cargue
-        window.img=img;
+        // *** LÍNEA CRUCIAL: CARGAR LA IMAGEN Y ASIGNARLA A window.img ***
+        window.img = await loadImage('img/panal.png'); // Esperamos a que la imagen se cargue
+
         ajustarCanvas();
         mostrarMensajesIniciales();
+
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('touchstart', startDrawing);
         canvas.addEventListener('mousemove', draw);
@@ -211,14 +224,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const invitacionImagen = document.getElementById('invitacion-imagen');
         const cerrarInvitacion = document.getElementById('cerrar-invitacion');
         const contenedorInvitacion = document.getElementById('contenedor-invitacion');
-        
+
+        // *** Obtener el botón DESPUÉS de que el DOM esté listo ***
+        const botonPlayAudio = document.getElementById('boton-play-audio');
+
         siguienteReto.addEventListener("click", () => {
             contenedorInvitacion.style.display = 'block';
             canvas.style.display = 'none';
             siguienteReto.style.display = 'none';
             botonReiniciar.style.display = "none";
-            temporizadorDisplay.style.display = 'none'; // Oculta el temporizador
-            barraProgreso.style.display = 'none'; // Oculta la barra de progreso
+            temporizadorDisplay.style.display = 'none';
+            barraProgreso.style.display = 'none';
         });
 
         cerrarInvitacion.addEventListener("click", () => {
@@ -233,12 +249,56 @@ document.addEventListener('DOMContentLoaded', async () => {
         botonReiniciar.addEventListener("click", () => {
             botonReiniciar.style.display = "none";
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(window.img, 0, 0, canvas.width, canvas.height);
             iniciarJuego();
         });
+
+        // *** Evento para el botón de audio ***
+        botonPlayAudio.addEventListener('click', () => {
+            if (!audioReproduciendose) {
+                audio.play().then(() => {
+                    console.log("Audio reproduciéndose");
+                    audio.loop = true;
+                    botonPlayAudio.textContent = "Pausar Música";
+                    audioReproduciendose = true;
+                }).catch(error => {
+                    console.error("Error al reproducir el audio (dentro del .then):", error);
+                    if (error.name === "NotAllowedError") {
+                        console.error("Posible problema de autoplay. El usuario debe interactuar primero con la página.");
+                    }
+                });
+            } else {
+                audio.pause();
+                console.log("Audio pausado");
+                botonPlayAudio.textContent = "Reproducir Música";
+                audioReproduciendose = false;
+            }
+        });
+
+        audio.addEventListener('error', (error) => {
+            console.error("Error al cargar el audio:", error);
+            switch (error.target.error.code) {
+                case MediaError.MEDIA_ERR_ABORTED:
+                    console.error('User aborted the video playback.');
+                    break;
+                case MediaError.MEDIA_ERR_NETWORK:
+                    console.error('A network error caused the audio download to fail.');
+                    break;
+                case MediaError.MEDIA_ERR_DECODE:
+                    console.error('An error occurred while decoding the audio.');
+                    break;
+                case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+                    console.error('The audio format or manifest URI is not supported.');
+                    break;
+                default:
+                    console.error('An unknown error occurred.');
+                    break;
+            }
+        });
+
     } catch (error) {
-        console.error("Error al cargar la imagen:", error);
-        mensajeInicio.textContent = "Error al cargar la imagen. Por favor, recargue la página.";
+        console.error("Error general en DOMContentLoaded:", error);
+        mensajeInicio.textContent = "Error al cargar el juego. Por favor, recargue la página.";
         mensajeInicio.style.display = 'block';
     }
 });
