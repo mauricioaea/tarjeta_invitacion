@@ -102,6 +102,11 @@ function startDrawing(e) {
 
 function draw(e) {
     if (!isDrawing || !juegoEnCurso) return;
+     // *** NUEVO: Prevenir el comportamiento predeterminado del touchmove *** //
+     if (e.touches) {
+        e.preventDefault();
+    }
+    //
 
     ctx.beginPath();
     ctx.moveTo(lastX, lastY);
@@ -159,7 +164,7 @@ function calcularProgreso() {
     barraProgreso.textContent = Math.round(progresoRecorte) + '%';
     console.log("Progreso de recorte:", progresoRecorte);
 
-    if (progresoRecorte >= 6 && juegoEnCurso) {
+    if (progresoRecorte >= 7 && juegoEnCurso) {
         finalizarJuego(`Jugador número ${numeroJugador} Felicitaciones, ha sido invitado al Cumpleaños # 8 de MATIAS ERAZO`, "success");
     }
 }
